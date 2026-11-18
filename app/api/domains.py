@@ -26,88 +26,78 @@ async def create_domain(
     db: AsyncSession = Depends(get_db)
 ):
 
-    return {
-        "status": "Create добавлен"
-    }
-    # domain = Domain(
-    #     domain=data.domain,
-    #     description=data.description
-    # )
+    domain = Domain(
+        domain=data.domain,
+        description=data.description
+    )
 
-    # db.add(domain)
+    db.add(domain)
 
-    # try:
-    #     await db.commit()
-    # except IntegrityError:
-    #     await db.rollback()
-    #     raise HTTPException(
-    #         status_code=409,
-    #         detail="Domain already exists"
-    #     )
+    try:
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Domain already exists"
+        )
 
-    # await db.refresh(domain)
+    await db.refresh(domain)
 
-    # return domain
+    return domain
 
 
 
 @router.get("", response_model=list[DomainResponse])
 async def get_domains(db: AsyncSession = Depends(get_db)):
-    return {
-        "status": "Read добавлен"
-    }
-    # result = await db.execute(select(Domain))
+    
+    result = await db.execute(select(Domain))
 
-    # return result.scalars().all()
+    return result.scalars().all()
 
 
 
 @router.get("/{domain_id}", response_model=DomainResponse)
 async def get_domain(domain_id: int, db: AsyncSession = Depends(get_db)):
 
-    return {
-        "status": "Read по объектам тоже создан"
-    }
-    # domain = await db.get(Domain, domain_id)
+    domain = await db.get(Domain, domain_id)
 
-    # if domain is None:
-    #     raise HTTPException(
-    #         status_code=404,
-    #         detail="Domain not found"
-    #     )
+    if domain is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Domain not found"
+        )
 
-    # return domain
+    return domain
 
 
 
 @router.put("/{domain_id}", response_model=DomainResponse)
 async def update_domain(domain_id: int, data: DomainUpdate, db: AsyncSession = Depends(get_db)):
-    return {
-        "status": "Update который put работает"
-    }
-    # domain = await db.get(Domain, domain_id)
+    
+    domain = await db.get(Domain, domain_id)
 
-    # if domain is None:
-    #     raise HTTPException(
-    #         status_code=404,
-    #         detail="Domain not found"
-    #     )
+    if domain is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Domain not found"
+        )
 
-    # domain.domain = data.domain
-    # domain.description = data.description
+    domain.domain = data.domain
+    domain.description = data.description
 
-    # try:
-    #     await db.commit()
-    # except IntegrityError:
-    #     await db.rollback()
-    #     raise HTTPException(
-    #         status_code=409,
-    #         detail="Domain already exists"
-    #     )
+    try:
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Domain already exists"
+        )
 
-    # await db.refresh(domain)
+    await db.refresh(domain)
 
-    # return domain
+    return domain
 
 
 
