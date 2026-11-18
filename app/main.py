@@ -8,16 +8,17 @@ from app.api.dns import router as dns_router
 from app.api.domains import router as domains_router
 
 
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     await init_db()
-#     yield
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
 
 
 app = FastAPI(
     title="DNS Lookup API",
     description="REST API for DNS lookups and domain management",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 app.include_router(dns_router)
